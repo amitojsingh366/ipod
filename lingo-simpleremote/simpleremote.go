@@ -6,7 +6,7 @@ import (
 	"math/bits"
 	"strings"
 
-	"github.com/teostofell/ipod"
+	"github.com/amitojsingh366/ipod"
 )
 
 func init() {

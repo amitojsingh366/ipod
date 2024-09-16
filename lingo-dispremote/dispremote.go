@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/teostofell/ipod"
+	"github.com/amitojsingh366/ipod"
 )
 
 func init() {

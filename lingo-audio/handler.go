@@ -1,7 +1,7 @@
 package audio
 
 import (
-	"github.com/teostofell/ipod"
+	"github.com/amitojsingh366/ipod"
 )
 
 type DeviceAudio interface {

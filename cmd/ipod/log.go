@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
-	"github.com/teostofell/ipod"
+	"github.com/amitojsingh366/ipod"
 )
 
 func FrameLogEntry(e *logrus.Entry, frame []byte) *logrus.Entry {

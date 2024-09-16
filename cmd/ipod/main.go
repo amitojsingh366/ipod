@@ -12,16 +12,16 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	"github.com/teostofell/ipod"
-	"github.com/teostofell/ipod/hid"
-	audio "github.com/teostofell/ipod/lingo-audio"
-	dispremote "github.com/teostofell/ipod/lingo-dispremote"
-	extremote "github.com/teostofell/ipod/lingo-extremote"
-	general "github.com/teostofell/ipod/lingo-general"
-	_ "github.com/teostofell/ipod/lingo-simpleremote"
-	"github.com/teostofell/ipod/metadata-parser"
-	remotecontrol "github.com/teostofell/ipod/remote-control"
-	"github.com/teostofell/ipod/trace"
+	"github.com/amitojsingh366/ipod"
+	"github.com/amitojsingh366/ipod/hid"
+	audio "github.com/amitojsingh366/ipod/lingo-audio"
+	dispremote "github.com/amitojsingh366/ipod/lingo-dispremote"
+	extremote "github.com/amitojsingh366/ipod/lingo-extremote"
+	general "github.com/amitojsingh366/ipod/lingo-general"
+	_ "github.com/amitojsingh366/ipod/lingo-simpleremote"
+	"github.com/amitojsingh366/ipod/metadata-parser"
+	remotecontrol "github.com/amitojsingh366/ipod/remote-control"
+	"github.com/amitojsingh366/ipod/trace"
 )
 
 var log = logrus.StandardLogger()

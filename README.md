@@ -22,9 +22,9 @@ At least it's finally working in my own car :)
 
 # build and run
 ```
-GO111MODULE=on go build github.com/oandrew/ipod/cmd/ipod
+GO111MODULE=on CGO_ENABLED=0 go build github.com/amitojsingh366/ipod/cmd/ipod
 # or cross compiling
-GO111MODULE=on GOOS=linux GOARCH=arm GOARM=6 go build github.com/oandrew/ipod/cmd/ipod
+GO111MODULE=on GOOS=linux GOARCH=arm GOARM=6 go build github.com/amitojsingh366/ipod/cmd/ipod
 
 # with debug logging
 ./ipod -d serve /dev/iap0

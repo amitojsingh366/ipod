@@ -11,7 +11,6 @@ import (
 	"strings"
 )
 
-// >> TODO: duplicated from lingo-extremote/extremote.go
 type PlayerState byte
 
 const (
@@ -20,8 +19,6 @@ const (
 	PlayerStatePaused  PlayerState = 0x02
 	PlayerStateError   PlayerState = 0xff
 )
-
-// <<
 
 type Item struct {
 	XMLName xml.Name `xml:"item"`
@@ -47,59 +44,26 @@ func (mp *MetadataParser) Start() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	buf := make([]byte, 0, 64*1024)
-	scanner.Buffer(buf, 1024*1024)
+	buf := make([]byte, 0, 641024)
+	scanner.Buffer(buf, 10241024)
 
 	var tag string
 	for scanner.Scan() {
 		chunk := scanner.Text()
 		tag += chunk
 
-		isClosing := strings.HasSuffix(chunk, "</item>")
-		if isClosing {
+		if strings.HasSuffix(chunk, "</item>") {
 			var item Item
-			xml.Unmarshal([]byte(tag), &item)
-
-			var decodedItem = decodeItem(item)
-
-			switch decodedItem.Code {
-			case "asar":
-				log.Printf("Artist: %s", decodedItem.Data)
-				mp.Artist = decodedItem.Data
-			case "asal":
-				log.Printf("Album Name: %s", decodedItem.Data)
-				mp.Album = decodedItem.Data
-			case "minm":
-				log.Printf("Title: %s", decodedItem.Data)
-				mp.Title = decodedItem.Data
-			case "astm":
-				trackLength := binary.BigEndian.Uint32([]byte(decodedItem.Data))
-				log.Printf("Track length: %d", trackLength)
-				mp.Length = int(trackLength)
-			case "pffr":
-				log.Printf(">> Play")
-				mp.Status = PlayerStatePlaying
-			case "paus":
-			case "pend":
-				log.Printf(">> Pause")
-				mp.Status = PlayerStatePaused
-			case "pres":
-				log.Printf(">> Resume")
-				mp.Status = PlayerStatePlaying
-			case "mdst":
-				log.Printf("Metadata bundle start")
-			case "mden":
-				log.Printf("Metadata bundle end")
-				indexStr := mp.Album + mp.Artist + mp.Title
-				if indexStr != mp.IndexStr {
-					mp.TrackIndex += 1
-					mp.IndexStr = indexStr
-				}
-			default:
+			if err := xml.Unmarshal([]byte(tag), &item); err != nil {
+				log.Printf("Error unmarshaling XML: %v", err)
+				continue
 			}
 
+			decodedItem := decodeItem(item)
+			mp.processItem(decodedItem)
 			tag = ""
 		}
 	}
@@ -109,10 +73,47 @@ func (mp *MetadataParser) Start() {
 	}
 }
 
-func (mp MetadataParser) Stop() {
-	_, w, _ := os.Pipe()
+func (mp *MetadataParser) processItem(item Item) {
+	switch item.Code {
+	case "asar":
+		log.Printf("Artist: %s", item.Data)
+		mp.Artist = item.Data
+	case "asal":
+		log.Printf("Album Name: %s", item.Data)
+		mp.Album = item.Data
+	case "minm":
+		log.Printf("Title: %s", item.Data)
+		mp.Title = item.Data
+	case "astm":
+		if len(item.Data) >= 4 {
+			trackLength := binary.BigEndian.Uint32([]byte(item.Data))
+			log.Printf("Track length: %d", trackLength)
+			mp.Length = int(trackLength)
+		} else {
+			log.Printf("Invalid track length data")
+		}
+	case "pffr", "pres":
+		log.Printf(">> Play")
+		mp.Status = PlayerStatePlaying
+	case "paus", "pend":
+		log.Printf(">> Pause")
+		mp.Status = PlayerStatePaused
+	case "mdst":
+		log.Printf("Metadata bundle start")
+	case "mden":
+		log.Printf("Metadata bundle end")
+		indexStr := mp.Album + mp.Artist + mp.Title
+		if indexStr != mp.IndexStr {
+			mp.TrackIndex++
+			mp.IndexStr = indexStr
+		}
+	default:
+		log.Printf("Unknown code: %s", item.Code)
+	}
+}
 
-	w.Close()
+func (mp *MetadataParser) Stop() {
+	// Placeholder for any stop functionality required
 }
 
 func decodeItem(item Item) Item {

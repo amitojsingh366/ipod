@@ -1,9 +1,11 @@
 package extremote
 
 import (
-	"github.com/teostofell/ipod"
-	"github.com/teostofell/ipod/metadata-parser"
-	remotecontrol "github.com/teostofell/ipod/remote-control"
+	"log"
+
+	"github.com/amitojsingh366/ipod"
+	"github.com/amitojsingh366/ipod/metadata-parser"
+	remotecontrol "github.com/amitojsingh366/ipod/remote-control"
 )
 
 type DeviceExtRemote interface {
@@ -141,25 +143,25 @@ func HandleExtRemote(req *ipod.Command, tr ipod.CommandWriter, dev DeviceExtRemo
 			NumTracks: 500,
 		})
 	case *SetCurrentPlayingTrack:
-		// data, ok := req.Payload.(*SetCurrentPlayingTrack)
+		data, ok := req.Payload.(*SetCurrentPlayingTrack)
 
-		// if ok {
-		// 	if data.TrackIndex < mp.TrackIndex {
-		// 		rc.Previous()
-		// 	} else {
-		// 		rc.Next()
-		// 	}
+		if ok {
+			if data.TrackIndex < mp.TrackIndex {
+				rc.Previous()
+			} else {
+				rc.Next()
+			}
 
-		// 	cmd, err := ipod.BuildCommand(&PlayStatusChangeNotification{
-		// 		Status: 0x00,
-		// 	})
+			cmd, err := ipod.BuildCommand(&PlayStatusChangeNotification{
+				Status: 0x00,
+			})
 
-		// 	log.Print(cmd)
-		// 	log.Print(err)
-		// 	ipod.Send(tr, cmd)
-		// }
+			log.Print(cmd)
+			log.Print(err)
+			ipod.Send(tr, cmd)
+		}
 
-		ipod.Respond(req, tr, ackSuccess(req))
+		//ipod.Respond(req, tr, ackSuccess(req))
 	case *SelectSortDBRecord:
 	case *GetColorDisplayImageLimits:
 		ipod.Respond(req, tr, &ReturnColorDisplayImageLimits{

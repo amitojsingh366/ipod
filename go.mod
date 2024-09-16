@@ -1,4 +1,4 @@
-module github.com/teostofell/ipod
+module github.com/amitojsingh366/ipod
 
 go 1.13
 

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/teostofell/ipod"
+	"github.com/amitojsingh366/ipod"
 )
 
 func init() {
@@ -50,7 +50,7 @@ var Lingos struct {
 	SetPlayStatusChangeNotificationShort       `id:"0x0026"`
 	PlayStatusChangeNotification               `id:"0x0027"`
 	PlayCurrentSelection                       `id:"0x0028"`
-	PlayControl                                `id:"0x0029"`
+	PlayControl                                `id:"0x0029"` //
 	GetTrackArtworkTimes                       `id:"0x002A"`
 	RetTrackArtworkTimes                       `id:"0x002B"`
 	GetShuffle                                 `id:"0x002C"`
